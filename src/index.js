@@ -34,3 +34,11 @@ function moveBox(event) {
     this.box.style.setProperty('--top', `${top}px`);
     this.box.style.setProperty('--left', `${left}px`);
 }
+
+function isDropZone(element) {
+    return element.nodeName !== 'HTML' && element.classList.contains('drop-zone');
+}
+
+function isDropZone2(element) {
+    return element.nodeName !== 'HTML' && element.classList.contains('drop-zone_2');
+}
