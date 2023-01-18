@@ -25,3 +25,12 @@ function getNewPosition(element, pageX, pageY, offsetX, offsetY) {
 
     return position;
 }
+
+function moveBox(event) {
+    const { box, offsetX, offsetY } = this;
+    const { pageX, pageY } = event;
+    const { top, left } = getNewPosition(box, pageX, pageY, offsetX, offsetY);
+
+    this.box.style.setProperty('--top', `${top}px`);
+    this.box.style.setProperty('--left', `${left}px`);
+}
