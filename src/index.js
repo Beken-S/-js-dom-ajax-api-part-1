@@ -42,3 +42,20 @@ function isDropZone(element) {
 function isDropZone2(element) {
     return element.nodeName !== 'HTML' && element.classList.contains('drop-zone_2');
 }
+
+function appendBoxToDropZone(box, dropZone) {
+    box.classList.remove('box_draggable');
+
+    if (isDropZone2(dropZone)) {
+        const { offsetTop: zoneTop, offsetLeft: zoneLeft } = dropZone;
+        const boxTop = parseInt(box.style.getPropertyValue('--top'));
+        const boxLeft = parseInt(box.style.getPropertyValue('--left'));
+
+        box.style.setProperty('--top', `${boxTop - zoneTop}px`);
+        box.style.setProperty('--left', `${boxLeft - zoneLeft}px`);
+        box.classList.add('box_position_absolute');
+    }
+
+    dropZone.append(box);
+    box.hidden = false;
+}
