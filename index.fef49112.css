@@ -23,6 +23,7 @@ body {
   touch-action: none;
   contain: layout;
   position: absolute;
+  box-shadow: 0 1px 6px #20212447;
 }
 
 .box_position_absolute {
