@@ -536,43 +536,26 @@ const creationZone = document.querySelector(".creation-zone");
 let moveBoxListener;
 let dropBoxListener;
 creationZone.addEventListener("pointerdown", createBox);
-function createBox(event) {
-    const { target: { offsetTop , offsetLeft  } , offsetX , offsetY  } = event;
-    const box = document.createElement("div");
-    box.classList.add("box", "box_draggable");
-    box.style.setProperty("--box-color", getRandomColor());
-    box.style.setProperty("--top", `${offsetTop}px`);
-    box.style.setProperty("--left", `${offsetLeft}px`);
-    box.addEventListener("dragstart", ()=>false);
-    document.body.prepend(box);
-    moveBoxListener = {
-        handleEvent: moveBox,
-        box,
-        offsetX,
-        offsetY
+function getNewPosition(element, pageX, pageY, offsetX, offsetY) {
+    const { offsetWidth: elementWidth , offsetHeight: elementHeight  } = element;
+    const { scrollWidth , scrollHeight  } = document.documentElement;
+    const position = {
+        top: pageY - offsetY,
+        left: pageX - offsetX,
+        bottom: pageY - offsetY + elementHeight,
+        right: pageX - offsetX + elementWidth
     };
-    dropBoxListener = {
-        handleEvent: dropBox,
-        box
-    };
-    document.addEventListener("pointerup", dropBoxListener);
-    document.addEventListener("pointermove", moveBoxListener);
-}
-function dropBox(event) {
-    document.removeEventListener("pointerup", dropBoxListener);
-    document.removeEventListener("pointermove", moveBoxListener);
-    this.box.hidden = true;
-    const { clientX , clientY  } = event;
-    const dropZone = document.elementFromPoint(clientX, clientY);
-    if (dropZone != null && isDropZone(dropZone)) {
-        appendBoxToDropZone(this.box, dropZone);
-        return;
+    if (position.top < 0) position.top = 0;
+    if (position.bottom > scrollHeight) {
+        position.top = scrollHeight - elementHeight;
+        position.bottom = position.top + elementHeight;
     }
-    if (dropZone?.parentNode != null && isDropZone(dropZone.parentNode)) {
-        appendBoxToDropZone(this.box, dropZone.parentNode);
-        return;
+    if (position.left < 0) position.left = 0;
+    if (position.right > scrollWidth) {
+        position.left = scrollWidth - elementWidth;
+        position.right = position.left + elementWidth;
     }
-    this.box.remove();
+    return position;
 }
 function moveBox(event) {
     const { box , offsetX , offsetY  } = this;
@@ -600,29 +583,46 @@ function appendBoxToDropZone(box, dropZone) {
     dropZone.append(box);
     box.hidden = false;
 }
-function getNewPosition(element, pageX, pageY, offsetX, offsetY) {
-    const { offsetWidth: elementWidth , offsetHeight: elementHeight  } = element;
-    const { scrollWidth , scrollHeight  } = document.documentElement;
-    const position = {
-        top: pageY - offsetY,
-        left: pageX - offsetX,
-        bottom: pageY - offsetY + elementHeight,
-        right: pageX - offsetX + elementWidth
-    };
-    if (position.top < 0) position.top = 0;
-    if (position.bottom > scrollHeight) {
-        position.top = scrollHeight - elementHeight;
-        position.bottom = position.top + elementHeight;
+function dropBox(event) {
+    document.removeEventListener("pointerup", dropBoxListener);
+    document.removeEventListener("pointermove", moveBoxListener);
+    this.box.hidden = true;
+    const { clientX , clientY  } = event;
+    const dropZone = document.elementFromPoint(clientX, clientY);
+    if (dropZone != null && isDropZone(dropZone)) {
+        appendBoxToDropZone(this.box, dropZone);
+        return;
     }
-    if (position.left < 0) position.left = 0;
-    if (position.right > scrollWidth) {
-        position.left = scrollWidth - elementWidth;
-        position.right = position.left + elementWidth;
+    if (dropZone?.parentNode != null && isDropZone(dropZone.parentNode)) {
+        appendBoxToDropZone(this.box, dropZone.parentNode);
+        return;
     }
-    return position;
+    this.box.remove();
 }
 function getRandomColor() {
     return `#${Math.floor(Math.random() * 16777215).toString(16).padEnd(6, 0)}`;
+}
+function createBox(event) {
+    const { target: { offsetTop , offsetLeft  } , offsetX , offsetY  } = event;
+    const box = document.createElement("div");
+    box.classList.add("box", "box_draggable");
+    box.style.setProperty("--box-color", getRandomColor());
+    box.style.setProperty("--top", `${offsetTop}px`);
+    box.style.setProperty("--left", `${offsetLeft}px`);
+    box.addEventListener("dragstart", ()=>false);
+    document.body.prepend(box);
+    moveBoxListener = {
+        handleEvent: moveBox,
+        box,
+        offsetX,
+        offsetY
+    };
+    dropBoxListener = {
+        handleEvent: dropBox,
+        box
+    };
+    document.addEventListener("pointerup", dropBoxListener);
+    document.addEventListener("pointermove", moveBoxListener);
 }
 
 },{}]},["ShInH","8lqZg"], "8lqZg", "parcelRequire57a6")
