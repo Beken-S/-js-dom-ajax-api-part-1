@@ -1,0 +1,22 @@
+.drop-zone {
+    min-width: 302px;
+    height: 302px;
+    border: 1px solid @color-primary;
+
+    &_1 {
+        display: grid;
+        grid-area: dz1;
+        grid-template-rows: auto;
+        grid-template-columns: repeat(3, auto);
+        gap: 1px;
+        align-content: flex-start;
+        justify-content: flex-start;
+        overflow: auto;
+    }
+
+    &_2 {
+        position: relative;
+        grid-area: dz2;
+        overflow: auto;
+    }
+}
