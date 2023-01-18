@@ -578,11 +578,9 @@ function dropBox(event) {
 function moveBox(event) {
     const { box , offsetX , offsetY  } = this;
     const { pageX , pageY  } = event;
-    const { top , left , bottom , right  } = getNewPosition(box, pageX, pageY, offsetX, offsetY);
+    const { top , left  } = getNewPosition(box, pageX, pageY, offsetX, offsetY);
     this.box.style.setProperty("--top", `${top}px`);
     this.box.style.setProperty("--left", `${left}px`);
-    const viewport = document.documentElement.getBoundingClientRect();
-    if (top < viewport.top || left < viewport.left || bottom > viewport.bottom || right > viewport.right) this.box.scrollIntoView();
 }
 function isDropZone(element) {
     return element.nodeName !== "HTML" && element.classList.contains("drop-zone");
