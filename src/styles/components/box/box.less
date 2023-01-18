@@ -1,0 +1,23 @@
+.box {
+    box-sizing: border-box;
+    width: 100px;
+    height: $width;
+    background-color: var(--box-color, #ffffff);
+
+    &_draggable {
+        position: absolute;
+        z-index: 1000;
+        box-shadow: 0 1px 6px 0 @color-shadow;
+        transform: translate3d(var(--left), var(--top), 0);
+        cursor: grabbing;
+        user-select: none;
+        touch-action: none;
+        contain: layout;
+    }
+
+    &_position_absolute {
+        position: absolute;
+        top: var(--top);
+        left: var(--left);
+    }
+}
