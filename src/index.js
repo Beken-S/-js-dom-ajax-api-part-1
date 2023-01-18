@@ -59,3 +59,23 @@ function appendBoxToDropZone(box, dropZone) {
     dropZone.append(box);
     box.hidden = false;
 }
+
+function dropBox(event) {
+    document.removeEventListener('pointerup', dropBoxListener);
+    document.removeEventListener('pointermove', moveBoxListener);
+    this.box.hidden = true;
+
+    const { clientX, clientY } = event;
+    const dropZone = document.elementFromPoint(clientX, clientY);
+
+    if (dropZone != null && isDropZone(dropZone)) {
+        appendBoxToDropZone(this.box, dropZone);
+        return;
+    }
+    if (dropZone?.parentNode != null && isDropZone(dropZone.parentNode)) {
+        appendBoxToDropZone(this.box, dropZone.parentNode);
+        return;
+    }
+
+    this.box.remove();
+}
