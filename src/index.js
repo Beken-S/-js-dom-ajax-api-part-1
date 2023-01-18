@@ -1,3 +1,9 @@
+const creationZone = document.querySelector('.creation-zone');
+let moveBoxListener;
+let dropBoxListener;
+
+creationZone.addEventListener('pointerdown', createBox);
+
 function getNewPosition(element, pageX, pageY, offsetX, offsetY) {
     const { offsetWidth: elementWidth, offsetHeight: elementHeight } = element;
     const { scrollWidth, scrollHeight } = document.documentElement;
@@ -84,4 +90,25 @@ function getRandomColor() {
     return `#${Math.floor(Math.random() * 16777215)
         .toString(16)
         .padEnd(6, 0)}`;
+}
+
+function createBox(event) {
+    const {
+        target: { offsetTop, offsetLeft },
+        offsetX,
+        offsetY,
+    } = event;
+    const box = document.createElement('div');
+
+    box.classList.add('box', 'box_draggable');
+    box.style.setProperty('--box-color', getRandomColor());
+    box.style.setProperty('--top', `${offsetTop}px`);
+    box.style.setProperty('--left', `${offsetLeft}px`);
+    box.addEventListener('dragstart', () => false);
+    document.body.prepend(box);
+
+    moveBoxListener = { handleEvent: moveBox, box, offsetX, offsetY };
+    dropBoxListener = { handleEvent: dropBox, box };
+    document.addEventListener('pointerup', dropBoxListener);
+    document.addEventListener('pointermove', moveBoxListener);
 }
